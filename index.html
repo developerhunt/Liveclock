@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Date and Time in IST</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f3f3f3;
+            margin: 0;
+        }
+        #date-time {
+            text-align: center;
+            background: linear-gradient(to right, #6dd5ed, #2193b0);
+            color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+            transition: all 0.5s ease;
+            cursor: pointer; /* Added for better user experience */
+        }
+        #date-time:hover {
+            background: linear-gradient(to right, #2193b0, #6dd5ed);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 9px 9px rgba(0, 0, 0, 0.22);
+        }
+    </style>
+    <script>
+        function updateDateTime() {
+            var now = new Date();
+            var timeOffsetInMilliseconds = (330 + now.getTimezoneOffset()) * 60000;
+            now = new Date(now.getTime() + timeOffsetInMilliseconds);
+
+            var hours = now.getHours().toString().padStart(2, '0');
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+            var seconds = now.getSeconds().toString().padStart(2, '0');
+
+            var day = now.getDate().toString().padStart(2, '0');
+            var month = (now.getMonth() + 1).toString().padStart(2, '0');
+            var year = now.getFullYear();
+
+            var dateTimeString = day + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+            document.getElementById('date-time').textContent = dateTimeString;
+            return dateTimeString;
+        }
+
+        function speakDateTime() {
+            var dateTimeString = updateDateTime();
+            var speech = new SpeechSynthesisUtterance(dateTimeString);
+            speech.lang = 'ta-IN'; // Set the language to Tamil
+            window.speechSynthesis.speak(speech);
+        }
+
+        setInterval(updateDateTime, 1000);
+        window.onload = updateDateTime;
+    </script>
+</head>
+<body>
+    <div id="date-time" onclick="speakDateTime()"></div>
+</body>
+</html>
